@@ -102,6 +102,7 @@ const Lector = () => {
                                     onCancel={() => setModalVisible(false)}
                                     footer={null}
                                 >
+                                    <p>ID: {selectedArticle._id}</p>
                                     <p>Autor: {selectedArticle.author}</p>
                                     <p>DOI: {selectedArticle.doi}</p>
                                     <p>Resume: {selectedArticle.abstract}</p>

@@ -17,9 +17,12 @@ export default function AddArticle() {
                 }
             });
             const data = await response.json();
-            console.log(data)
-            message.success('Registro guardado correctamente.');
-            // onGenerated(JSON.parse(data.content));
+            if (response.status !== 200) {
+                message.error('Error al registrar: ' + data.error);
+            }
+            else{
+                message.success('Registro guardado correctamente.');
+            }
         } catch (err) {
             message.error('Error al guardar el registro.');
         }
