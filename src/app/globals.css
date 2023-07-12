@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --app-primary-color: #2813ad;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+.app-background {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(2,0,36);
+  background: linear-gradient(34deg, rgba(2,0,36,1) 0%, rgba(4,4,64,1) 56%, rgba(2,54,159,1) 100%);
+}
+
+.button-primary {
+  background-color: var(--app-primary-color);
+  @apply text-white hover:bg-indigo-600 py-1 px-4 rounded-md transition duration-300 
+}
+
+.button-danger {
+ @apply text-white hover:bg-red-600 bg-red-800 py-1 px-4 rounded-md transition duration-300
+}
+
+.font-color-label{
+  @apply text-black dark:text-white align-middle pt-1
+}
+
+.ant-form-item{
+  @apply  mb-0 min-[576px]:mb-2  md:mb-4
+}
+
+.ant-pagination{
+  @apply  mt-4 min-[576px]:mt-0
+}
+
+.ant-btn-primary{
+  background-color: var(--app-primary-color) !important;
+}
+
+.ant-tabs-top >.ant-tabs-nav{
+  @apply  mb-0
+}
+
+.app-card {
+  @apply p-2 sm:p-4 dark:bg-zinc-900/[0.2] rounded-b-lg w-full px-2 rounded-md
+}
+
+.app-center {
+  @apply flex items-center justify-center p-4 
+}
