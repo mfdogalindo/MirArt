@@ -21,6 +21,9 @@ const Lector = () => {
     const [selectedArticle, setSelectedArticle] = useState<ArticleType | null>(null);
     const [filterValue, setFilterValue] = useState('');
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+
     useEffect(() => {
         const fetchArticles = async () => {
             try {
@@ -54,10 +57,20 @@ const Lector = () => {
 
     const filteredArticles = articles.filter((article: ArticleType) =>
         article.title.toLowerCase().includes(filterValue.toLowerCase()) ||
-        article.keywords.toLowerCase().includes(filterValue.toLowerCase())
+        article.keywords?.toLowerCase().includes(filterValue.toLowerCase())
     );
 
+    const rowNumber = (_:any, __: any, index: any) => {
+        return ((currentPage - 1) * pageSize) + index + 1;
+    };
+
     const columns = [
+        {
+            title: '#',
+            dataIndex: 'index',
+            key: 'index',
+            render: rowNumber
+        },
         {
             title: 'Autor',
             dataIndex: 'author',
@@ -94,7 +107,27 @@ const Lector = () => {
                         <div className='app-card'>
                             <h1 className='pb-4 px-2'>Buscar artículos</h1>
                             <Input placeholder="Filtrar por título o claves" value={filterValue} onChange={handleFilterChange} />
-                            <Table columns={columns} dataSource={filteredArticles} rowKey="_id" onRow={(record) => ({ onClick: () => handleRowClick(record) })} />
+                            <Table
+                                columns={columns}
+                                dataSource={filteredArticles}
+                                rowKey="_id"
+                                onRow={(record) => ({
+                                    onClick: () => handleRowClick(record)
+                                })}
+                                pagination={{
+                                    current: currentPage,
+                                    pageSize: pageSize,
+                                    onChange: (page, size) => {
+                                        setCurrentPage(page);
+                                        setPageSize(size);
+                                    },
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ['10', '20', '30', '40'],
+                                    total: articles.length
+                                }}
+                                size='small'
+                            />
+
                             {selectedArticle && (
                                 <Modal
                                     title={selectedArticle.title}
@@ -102,11 +135,12 @@ const Lector = () => {
                                     onCancel={() => setModalVisible(false)}
                                     footer={null}
                                 >
-                                    <p>ID: {selectedArticle._id}</p>
-                                    <p>Autor: {selectedArticle.author}</p>
-                                    <p>DOI: {selectedArticle.doi}</p>
-                                    <p>Resume: {selectedArticle.abstract}</p>
-                                    <p>Claves: {selectedArticle.keywords}</p>
+                                    <p className='pb-2'><b>ID:</b> {selectedArticle._id}</p>
+                                    <p className='pb-2'><b>Autor:</b> {selectedArticle.author}</p>
+                                    <p className='pb-2'><b>DOI:</b> {selectedArticle.doi}</p>
+                                    <p ><b>Resume:</b></p>
+                                    <p className='app-card'>{selectedArticle.abstract}</p>
+                                    <p><b>Claves:</b> {selectedArticle.keywords}</p>
                                 </Modal>
                             )}
                         </div>
