@@ -64,6 +64,14 @@ const Lector = () => {
         return ((currentPage - 1) * pageSize) + index + 1;
     };
 
+    const doiRender = (_:any, record: any, __: any) => {
+        return record.doi.replace('https://doi.org/', '');
+    };
+
+    const aiRender = (_:any, record: any, __: any) => {
+        return record.AI ? 'Sí' : 'No';
+    };
+
     const columns = [
         {
             title: '#',
@@ -82,10 +90,17 @@ const Lector = () => {
             key: 'title',
         },
         {
+            title: 'AI',
+            dataIndex: 'AI',
+            key: 'AI',
+            render: aiRender
+        },
+        {
             title: 'DOI',
             dataIndex: 'doi',
             key: 'doi',
-        },
+            render: doiRender
+        }
     ];
 
     return (
