@@ -1,9 +1,14 @@
 'server only';
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '../config/mongodb'
+import { isAuthorized } from '../services/AuthService';
 
 export async function GET() {
     //const doiParam = request.nextUrl.searchParams.get("doi");
+
+    if(!await isAuthorized()){
+        return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
+    }
 
     try {
         const db = await connectToDatabase();
@@ -19,6 +24,10 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+
+    if(await isAuthorized()){
+        return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
+    }
 
     try {
         const db = await connectToDatabase();

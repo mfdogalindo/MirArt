@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import SessionGuard from './components/SessionGuard';
 
 const links = [
   { label: 'Listar', href: '/lector' },
@@ -7,6 +8,7 @@ const links = [
 
 export default function Home() {
   return (
+    <SessionGuard>
     <main className="app-center p-24">
       <div className='app-card'>
         <h1 className='pb-4 px-2'>MirArt</h1>
@@ -23,5 +25,6 @@ export default function Home() {
         </div>
       </div>
     </main>
+    </SessionGuard>
   )
 }
