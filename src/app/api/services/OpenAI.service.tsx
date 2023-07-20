@@ -13,7 +13,7 @@ export class OpenAIService {
     this.openai = new OpenAIApi(this.configuration);
   }
 
-  getProductDescription (prompt: string): Promise<CreateChatCompletionResponse> {
+  getDescription (prompt: string): Promise<CreateChatCompletionResponse> {
     const response = this.openai.createChatCompletion({
       messages: [{ role: 'user', content: prompt }],
       model: 'gpt-3.5-turbo',
@@ -21,9 +21,8 @@ export class OpenAIService {
       max_tokens: 512
     });
     return response.then((response) => {
-      return response.data;
+      return response.data.choices[0];
     }).catch((error) => {
-      console.log(error);
       return error;
     }
     );

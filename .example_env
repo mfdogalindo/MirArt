@@ -1,0 +1,8 @@
+# ENV Variables example
+AUTHORIZED_USERS=youremail@mail.com
+GOOGLE_AUTH_ID=s0m3k3y.apps.googleusercontent.com
+GOOGLE_AUTH_SECRET=GO000-Akjadaskd123sda
+MONGO_DB_CONNECTION=mongodb+srv://username:password@cluster.abcde.mongodb.net/mirart?retryWrites=true&w=majority
+NEXTAUTH_SECRET=my_ultra_secure_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
+OPENAI_API_KEY=sk-somekey
