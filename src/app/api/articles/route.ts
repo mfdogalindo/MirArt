@@ -1,13 +1,13 @@
 'server only';
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '../config/mongodb'
-import { isAuthorized } from '../services/AuthService';
+import { notAuthorized } from '../services/AuthService';
 import { cp } from 'fs';
 
 export async function GET() {
     //const doiParam = request.nextUrl.searchParams.get("doi");
 
-    if(!await isAuthorized()){
+    if(await notAuthorized()){
         return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
     }
 
@@ -26,7 +26,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
 
-    if(await isAuthorized()){
+    if(await notAuthorized()){
         return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
     }
 
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
 
-    if(await isAuthorized()){
+    if(await notAuthorized()){
         return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
     }
 

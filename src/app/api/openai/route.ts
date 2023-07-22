@@ -2,13 +2,13 @@ import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { OpenAIService } from '../services/OpenAI.service';
-import { isAuthorized } from '../services/AuthService';
+import { notAuthorized } from '../services/AuthService';
 import { getService } from '../services/Articles.service';
 
 
 export async function POST(request: NextRequest) {
 
-    if(await isAuthorized()){
+    if(await notAuthorized()){
         return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
     }
 

@@ -3,7 +3,7 @@ import 'server-only';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-export async function isAuthorized () {
+export async function notAuthorized () {
    const session = await getServerSession(authOptions);
    let result = false;
 
@@ -12,5 +12,5 @@ export async function isAuthorized () {
    if(session && session.user?.email){
       result = authorizedUsers.includes(session.user?.email);
    }
-   return result;
+   return !result;
 }
