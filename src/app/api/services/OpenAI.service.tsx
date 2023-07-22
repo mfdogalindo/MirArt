@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { OpenAIApi, Configuration, CreateChatCompletionResponse } from 'openai';
+import { format } from 'path';
 
 export class OpenAIService {
   private configuration: Configuration;
@@ -13,6 +14,15 @@ export class OpenAIService {
     this.openai = new OpenAIApi(this.configuration);
   }
 
+  formatReturn (input: any) {
+    try {
+      return JSON.parse(input.message.content);
+    }
+    catch (error) {
+      return input;
+    }
+  }
+
   getDescription (prompt: string): Promise<CreateChatCompletionResponse> {
     const response = this.openai.createChatCompletion({
       messages: [{ role: 'user', content: prompt }],
@@ -21,7 +31,7 @@ export class OpenAIService {
       max_tokens: 512
     });
     return response.then((response) => {
-      return response.data.choices[0];
+      return this.formatReturn(response.data.choices[0]);
     }).catch((error) => {
       return error;
     }
