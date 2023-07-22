@@ -19,14 +19,16 @@ export async function POST(request: NextRequest) {
 
 
     const query = `
-        Rol: ${input.role}
-        Conexto: ${input.context}
-        Estas realizando un proceso de selección de artículos para determinar si son relevantes para tu investigación.
+    Estas realizando un proceso de selección de artículos para determinar si son relevantes para tu investigación.
+        Tu Rol: ${input.role}
+        Contexto de la investigación: ${input.context}
+        Reglas:
         Se ha definido el siguiente criterio de clasificación:
            * Las preguntas de investigación se encuentran en el campo "questions" del json de entrada envuelto en comillas triples ("""). 
-           * Vas a determinar si el artículo tiene relevancia para la investigación según el título, el resumen y las palabras clave.
+           * Vas a determinar si el artículo tiene relevancia para la investigación según el título (title) , el resumen (abstract) y las palabras clave (keywords).
            * Dentro del prompt tambien se esperan definiciones para aclarar el contexto de la investigación.
-
+           * Aunque los artículos estén en inglés, el resultado debe ser entregado en español.
+           
         Como resultado, se espera un json con el siguiente formato:
         {
             result: [
@@ -51,17 +53,21 @@ export async function POST(request: NextRequest) {
             ]
         }        
 
-        JSON de entrada:
+        JSON de entrada con datos del artículo:
         """{
-            "Titulo": "${input.article.title}",
-            "Resumen": "${input.article.abstract}
-            "Palabras_clave": "${input.article.keywords}",
+            "title": "${input.article.title}",
+            "abstract": "${input.article.abstract}
+            "keywords": "${input.article.keywords}",
             "questions": ${input.questions}
         }"""
 
     `;
 
     const openai = new OpenAIService();
+
+    console.log('/n****************************************')
+    console.log(query)
+    console.log('/n****************************************/n/n')
 
     const response = await openai.getDescription(query)
 

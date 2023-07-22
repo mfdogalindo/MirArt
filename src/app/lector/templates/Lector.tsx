@@ -13,6 +13,7 @@ export interface ArticleType {
     doi: string;
     abstract: string;
     keywords: string;
+    AI?: string;
 }
 
 const Lector = () => {
@@ -164,6 +165,8 @@ const Lector = () => {
                                     <p ><b>Resume:</b></p>
                                     <p className='app-card'>{selectedArticle.abstract}</p>
                                     <p><b>Claves:</b> {selectedArticle.keywords}</p>
+                                    <p ><b>AI:</b></p>
+                                    <p className='app-card'>{selectedArticle.AI}</p>
                                 </Modal>
                             )}
                         </div>

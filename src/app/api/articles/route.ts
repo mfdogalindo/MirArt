@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '../config/mongodb'
 import { notAuthorized } from '../services/AuthService';
-import { cp } from 'fs';
+import { ObjectId } from 'mongodb';
 
 export async function GET() {
     //const doiParam = request.nextUrl.searchParams.get("doi");
@@ -89,19 +89,22 @@ export async function PUT(request: NextRequest) {
         }
 
         const data = JSON.parse(result);
+        const id = new ObjectId(data._id);
+        delete data._id;
 
-        const existingArticle = await collection.findOne({ doi: data.doi });
+        const existingArticle = await collection.findOne({ _id: id});
 
         if (!existingArticle) {
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });
         }
 
-        const responseDb = await collection.updateOne({ doi: data.doi }, { $set: data });
+        const responseDb = await collection.updateOne({ _id: id}, { $set: data });
 
         return NextResponse.json(responseDb, { status: 200 });
 
     }
     catch (error) {
+        console.log(error);
         return NextResponse.json({ error }, { status: 500 });
     }
 }

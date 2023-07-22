@@ -6,6 +6,7 @@ import SessionMenu from "./sessionMenu";
 const links = [
    { label: "Listar", href: "/lector" },
    { label: "Crear", href: "/registrar" },
+   { label: "Clasificar", href: "/clasificar" },
 ];
 
 export default async function HeaderComponent() {
