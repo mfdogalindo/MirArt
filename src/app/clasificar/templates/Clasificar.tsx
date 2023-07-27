@@ -7,6 +7,7 @@ import ProgressBar from '../molecules/ProgressBar';
 import { useEffect, useState } from 'react';
 import { ArticleType } from '@/app/lector/templates/Lector';
 import Loading from '../molecules/loading';
+import PQueue from 'p-queue';
 
 
 export default function ClassifyArticles() {
@@ -66,7 +67,7 @@ export default function ClassifyArticles() {
             if(!response.ok) {
                 message.error('Error al analizar articulo: \t' + data.error);
             }
-            return {...article, AI: JSON.stringify(data)};
+            return {...article, AI: data};
         } catch (err: any) {
             message.error('Error al analizar articulo: \t' + err.message);
             return article;
@@ -94,19 +95,25 @@ export default function ClassifyArticles() {
         }
     };
 
+    const queue = new PQueue({ concurrency: 10 });
+
     const onSubmit = async (prompt: {role: string, context: string, questions: string}) => {
         let currentIndex = 0;
         setRunning(true);
-        for (const article of articles) {
-            currentIndex++;
-            setCurrentArticle({index: currentIndex, title: article.title});
-            const result = await analyzeArticle(article, prompt);
-            await updateArticle(result); 
-        }
+
+        await Promise.all(
+            articles.map((article) =>
+              queue.add(async () => {
+                currentIndex++;
+                setCurrentArticle({index: currentIndex, title: article.title});
+                const result = await analyzeArticle(article, prompt);
+                await updateArticle(result);
+              })
+            )
+          );
+        setCurrentArticle({index: 0, title: ""});
         setRunning(false);
     };
-
-
 
 
     return (

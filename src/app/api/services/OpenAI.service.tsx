@@ -14,12 +14,12 @@ export class OpenAIService {
     this.openai = new OpenAIApi(this.configuration);
   }
 
-  formatReturn (input: any) {
+  formatReturn (input: any): Object {
     try {
       return JSON.parse(input.message.content);
     }
     catch (error) {
-      return input;
+      return {};
     }
   }
 

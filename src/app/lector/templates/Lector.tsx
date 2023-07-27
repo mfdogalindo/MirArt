@@ -76,8 +76,58 @@ const Lector = () => {
         return <a href={'https://doi.org/'+code} target='_blank'>{code}</a>
     };
 
+    const renderQuestions = (data: any) => {
+        try{
+            return (<div>
+            {
+                data.map((item: any, indexa: number) => {
+                    return (
+                        <div key={indexa} className='py-2'>
+                        <p className='py-2 font-bold'>{item.question}</p>
+                        {item.result.map((result: any, index: number) => {
+                            return (
+                                <div key={index}>
+                                    <p>{result.answer}</p>
+                                    <p><b>{result.type}: </b>{result.fits ? 'Si' : 'No'} - {result.explain}</p>
+                                </div>
+                            )
+                        })}
+                        </div>
+                    )
+                })
+                }
+            
+        </div>)
+        }catch{
+            return (<div>{JSON.stringify(data)}</div>)
+        }
+
+    }
+
     const aiRender = (_:any, record: any, __: any) => {
-        return record.AI ? 'Sí' : 'No';
+        try{
+            let sumFits = 0;
+            const questionsSummary : string[] = [];
+
+            record.AI.forEach((item: any, index: number) => {
+                let fitsCount = 0;
+
+                item.result.forEach((result: any) => {
+                if (result.fits) {
+                    fitsCount++;
+                }
+                });
+
+                sumFits += fitsCount;
+                questionsSummary.push(`Q${index + 1}: ${fitsCount}`);
+            });
+
+            return questionsSummary.join('\n');
+        }
+        catch(err){
+            console.log(err, record)
+            return 'No';
+        }
     };
 
     const columns = [
@@ -166,7 +216,8 @@ const Lector = () => {
                                     <p className='app-card'>{selectedArticle.abstract}</p>
                                     <p><b>Claves:</b> {selectedArticle.keywords}</p>
                                     <p ><b>AI:</b></p>
-                                    <p className='app-card'>{selectedArticle.AI}</p>
+                                    <div className='app-card'>{renderQuestions(selectedArticle.AI)}</div>
+                                    
                                 </Modal>
                             )}
                         </div>

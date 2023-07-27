@@ -28,30 +28,32 @@ export async function POST(request: NextRequest) {
            * Vas a determinar si el artículo tiene relevancia para la investigación según el título (title) , el resumen (abstract) y las palabras clave (keywords).
            * Dentro del prompt tambien se esperan definiciones para aclarar el contexto de la investigación.
            * Aunque los artículos estén en inglés, el resultado debe ser entregado en español.
+           * Si no hay resumen, debe dejar fits como false y la explicación debe ser "No hay resumen".
+           * Si no hay palabras clave, debe dejar fits como false y la explicación debe ser "No hay palabras clave".
            
         Como resultado, se espera un json con el siguiente formato:
-        {
-            result: [
-                {
-                    question : "some question", // primera pregunta de investigación
-                    result: [
-                        {
-                            "title": true, // si el título es relevante para la pregunta de investigación
-                            "explain": "some explanation" // explicación de por qué el título es relevante
-                        },
-                        {
-                            "abstract": false, // si el resumen es relevante para la pregunta de investigación
-                            "explain": "some explanation" // explicación de por qué el resumen es relevante
-                        },
-                        {
-                            "keywords": true, // si las palabras clave son relevantes para la pregunta de investigación
-                            "explain": "some explanation" // explicación de por qué las palabras clave son relevantes
-                        }
-
-                    ]
-                }
-            ]
-        }        
+        [
+            {
+                question : "some question", // primera pregunta de investigación
+                result: [
+                    {
+                        type: "title", // tipo de resultado (title, abstract, keywords)
+                        fits: true, // si el resultado es relevante para la pregunta de investigación
+                        explain: "some explanation" // explicación de por qué el resultado es relevante
+                    },
+                    {
+                        type: "abstract",
+                        fits: false,
+                        explain: "some explanation"
+                    },
+                    {
+                        type: "keywords",
+                        fits: true,
+                        explain: "some explanation"
+                    }
+                ]
+            }
+        ]      
 
         JSON de entrada con datos del artículo:
         """{
@@ -65,9 +67,9 @@ export async function POST(request: NextRequest) {
 
     const openai = new OpenAIService();
 
-    console.log('/n****************************************')
-    console.log(query)
-    console.log('/n****************************************/n/n')
+    // console.log('/n****************************************')
+    // console.log(query)
+    // console.log('/n****************************************/n/n')
 
     const response = await openai.getDescription(query)
 
